@@ -1,4 +1,4 @@
-package gs;
+package gs.nyc2020;
 
 import java.util.Comparator;
 import java.util.HashMap;
