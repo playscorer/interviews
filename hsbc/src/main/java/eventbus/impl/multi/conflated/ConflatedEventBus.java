@@ -1,9 +1,6 @@
 package eventbus.impl.multi.conflated;
 
-import eventbus.Event;
-import eventbus.EventBus;
-import eventbus.EventFilter;
-import eventbus.Subscriber;
+import eventbus.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
@@ -23,7 +20,7 @@ public class ConflatedEventBus implements EventBus {
 
     @Override
     public void publishEvent(Event event) {
-        if (eventCache.contains(event)) {
+        if (eventCache.contains(event)) { // very time costly option
             eventCache.remove(event);
         }
         eventCache.offer(event);
@@ -49,7 +46,13 @@ public class ConflatedEventBus implements EventBus {
                         if (subscribers != null) {
                             try {
                                 Event event = eventCache.take();
-                                subscribers.forEach(subscriber -> subscriber.onEvent(event));
+                                subscribers.forEach(subscriber -> {
+                                    try {
+                                        subscriber.onEvent(event);
+                                    } catch (EventException e) {
+                                        log.error(e.getMessage());
+                                    }
+                                });
 
                             } catch (InterruptedException e) {
                                 Thread.currentThread().interrupt();

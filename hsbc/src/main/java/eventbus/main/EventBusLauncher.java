@@ -16,6 +16,17 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Slf4j
 public class EventBusLauncher {
 
+    /*
+        Problem 1:
+            How to handle multiple requests for many users? A Queue per user
+            How to process requests in order for each user? Could be a class Node containing an AtomicBoolean and a Queue as a value of a Map<UserId, Node>. The boolean indicates only one Thread at a time is processing one user's requests.
+            How to avoid duplicates? Set of reqIds
+            How many threads? One Threadpool of a fixed amount of threads could be used to browse through the Map<UserId, Node> structure.
+
+        Problem 2:
+            We have an array of ascending numbers and then of descending numbers. Find the pivot? Could use the binary search from the middle and check if leftV < midV look on the right partition else on the left partition.
+     */
+
     public static void main(String[] args) throws InterruptedException {
         // Single Threaded Event Bus
         log.info("Single Threaded Event Bus");

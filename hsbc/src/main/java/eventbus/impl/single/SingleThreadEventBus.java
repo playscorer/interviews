@@ -1,15 +1,14 @@
 package eventbus.impl.single;
 
-import eventbus.Event;
-import eventbus.EventBus;
-import eventbus.EventFilter;
-import eventbus.Subscriber;
+import eventbus.*;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 public class SingleThreadEventBus implements EventBus {
 
     private final Map<Class<?>, List<Subscriber>> subscribersByType = new HashMap<>();
@@ -18,7 +17,13 @@ public class SingleThreadEventBus implements EventBus {
     public void publishEvent(Event event) {
         List<Subscriber> subscribers = subscribersByType.get(event.getClass());
         if (subscribers != null) {
-            subscribers.forEach(subscriber -> subscriber.onEvent(event));
+            subscribers.forEach(subscriber -> {
+                try {
+                    subscriber.onEvent(event);
+                } catch (EventException e) {
+                    log.error(e.getMessage());
+                }
+            });
         }
     }
 
