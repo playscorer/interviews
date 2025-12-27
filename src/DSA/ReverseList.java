@@ -14,34 +14,24 @@ public class ReverseList {
     }
 
     public static ListNode reverseList(ListNode head) {
-        if (head == null) {
-            return null;
+        ListNode prev = null;
+        ListNode curr = head;
+        while (curr != null) {
+            ListNode nextTemp = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = nextTemp;
         }
-        if (head.next == null) {
-            return head;
-        }
-        ListNode prev = head;
-        ListNode cur = prev.next;
-        prev.next = null;
-        while (cur.next != null) {
-            head = cur.next;
-            cur.next = prev;
-            prev = cur;
-            cur = head;
-        }
-        cur.next=prev;
-        return cur;
+        return prev;
     }
 
-    public static ListNode reverseListCleanCode(ListNode head) {
-        ListNode prev=head;
-        ListNode cur;
-
+    public static ListNode reverseListLessWorst(ListNode head) {
         if (head == null) {
             return null;
         }
 
-        cur=head.next;
+        ListNode prev=head;
+        ListNode cur=head.next;
 
         while (cur != null) {
             ListNode next = cur.next;
@@ -52,6 +42,26 @@ public class ReverseList {
 
         head.next=null;
         return prev;
+    }
+
+    public static ListNode reverseListWorstCode(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+        if (head.next == null) {
+            return head;
+        }
+        ListNode prev = head;
+        ListNode cur = head.next;
+        head.next = null;
+        while (cur.next != null) {
+            head = cur.next;
+            cur.next = prev;
+            prev = cur;
+            cur = head;
+        }
+        cur.next=prev;
+        return cur;
     }
 
     public static void displayList(ListNode head) {
@@ -76,8 +86,7 @@ public class ReverseList {
         next.next = null;
 
         displayList(head);
-        //displayList(reverseList(head));
-        displayList(reverseListCleanCode(head));
+        displayList(reverseList(head));
     }
 
 }
