@@ -33,6 +33,27 @@ public class ReverseList {
         return cur;
     }
 
+    public static ListNode reverseListCleanCode(ListNode head) {
+        ListNode prev=head;
+        ListNode cur;
+
+        if (head == null) {
+            return null;
+        }
+
+        cur=head.next;
+
+        while (cur != null) {
+            ListNode next = cur.next;
+            cur.next = prev;
+            prev = cur;
+            cur = next;
+        }
+
+        head.next=null;
+        return prev;
+    }
+
     public static void displayList(ListNode head) {
         while (head != null) {
             System.out.print(head.val + " ");
@@ -55,7 +76,8 @@ public class ReverseList {
         next.next = null;
 
         displayList(head);
-        displayList(reverseList(head));
+        //displayList(reverseList(head));
+        displayList(reverseListCleanCode(head));
     }
 
 }

@@ -64,6 +64,10 @@ public class BestTimeBuySellA {
     }
 
     public static void main(String[] args) {
+        int[] wrong = {2,4,1};
+        System.out.println(bestTimeBuySellA(wrong));
+        // returns 0 and should return 2
+
         int[] ex1 = {7, 1, 5, 3, 6 ,4};
         System.out.println(bestTimeBuySellA2(ex1));
 
