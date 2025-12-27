@@ -1,0 +1,8 @@
+I have a list of 1000 processes and I want to kill all of them.
+What cmd shall I use in UNIX?
+
+kill -9 $(ps -e | grep <name> | awk '{print $1}')
+
+OR
+
+kill -9 $(ps -e | awk '/name/ {print $1}')

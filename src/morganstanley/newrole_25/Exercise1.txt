@@ -1,0 +1,11 @@
+
+    Q1: Given a cube, how many cubes do we need to build a cube of 5-cube sides?
+    A1: 5^3 = 125
+
+    Q2: Given this new cube, how many cubes will be painted by plunging this cube under water?
+    A2-1: 6 faces (1: 25, 2: 20, 3: 16, 4: 16, 5:12, 6: 9) = 25 + 20 + 16 + 16 + 12 + 9 = 98
+          125 - 98 = 27 | What is 27? 3^3 | What is 3^3? (n-2)^3
+    A2-2: Let's start from the 125 cubes and remove the inner ones : 125 - 3^3 = 125 - 27 = 98
+
+    Q3: General formula
+    A3: Given n, the length of one side: n^3 - (n-2)^3
