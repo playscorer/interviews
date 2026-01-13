@@ -72,19 +72,24 @@ public class ReverseList {
         System.out.println();
     }
 
-    public static void main(String[] args) {
+    public static ListNode createNewList(int length, int incr) {
         ListNode head = new ListNode();
         ListNode cur = head;
-        ListNode next = null;
-        int listSize = 5;
-        for (int i=1; i<=listSize; i++) {
+        ListNode prev = null;
+
+        for (int i=1; i<=length; i+=incr) {
             cur.val=i;
             cur.next = new ListNode();
-            next = cur;
+            prev = cur;
             cur = cur.next;
         }
-        next.next = null;
+        prev.next = null;
 
+        return head;
+    }
+
+    public static void main(String[] args) {
+        ListNode head = createNewList(5,1);
         displayList(head);
         displayList(reverseList(head));
     }
