@@ -10,8 +10,10 @@ public class NumberOfIslands {
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[0].length; j++) {
                 if (grid[i][j] == '1') {
+                    grid[i][j] = '0';
                     count++;
                     bfs(i, j, grid);
+                    //dfs(i, j, grid);
                 }
             }
         }
@@ -35,6 +37,21 @@ public class NumberOfIslands {
                     grid[x][y] = '0';
                     neighbors.offer(new int[]{x, y});
                 }
+            }
+        }
+    }
+
+    public static void dfs(int i, int j, char[][] grid) {
+        int[][] directions = new int[][]{{0, 1}, {0, -1}, {-1, 0}, {1, 0}};
+        int[] pt = new int[]{i, j};
+
+        for (int[] dir : directions) {
+            int x = pt[0] + dir[0];
+            int y = pt[1] + dir[1];
+
+            if (0 <= x && x < grid.length && 0 <= y && y < grid[0].length && grid[x][y] == '1') {
+                grid[x][y] = '0';
+                dfs(x, y, grid);
             }
         }
     }
