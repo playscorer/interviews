@@ -1,8 +1,6 @@
 package DSA;
 
-import java.sql.SQLOutput;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class ProductExceptSelf {
     public static int[] productExceptSelf(int[] nums) {
