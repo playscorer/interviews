@@ -19,6 +19,8 @@ import java.util.function.Function;
  *     List<User> sortedByAge = customSort(users, User::age);
  *     List<User> sortedByNameLength = customSort(users, u -> u.name().length());
  *
+ * The Difference Between map() and flatMap()
+ *
  * Difference between Concurrency and Parallelism
  *
  * How to make an Integer thread safe? AtomicInteger
@@ -44,7 +46,8 @@ import java.util.function.Function;
  * VirtualThreads Java 21
  *
  * Zookeeper (Apache ZooKeeper) is a centralized service for distributed applications that provides essential coordination, configuration,
- * and naming services, acting like a reliable "phonebook" and "lock" for large systems
+ * and naming services, acting like a reliable "phonebook" or "single source of truth" and "lock" for all the different parts (nodes or servers)
+ * of a distributed system, helping them work together seamlessly, even if some parts fail.
  *
  * Sharding, also known as horizontal partitioning, involves dividing a large database into smaller, more manageable databases, or 'shards'.
  * Each shard is a distinct database instance.
