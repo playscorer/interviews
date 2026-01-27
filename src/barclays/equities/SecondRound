@@ -1,0 +1,35 @@
+Interview with Charles Xeller on Thursday 22nd of Jan 2026
+----------------------------------------------------------
+
+Talk about yourself
+
+Why am I interested in this role?
+
+Why did I change industries into finance?
+
+What project am I more proud of? Broker Portal and Natixis eTP
+
+Explain HealthCheck and the RTT inputs
+Was it at hot-hot, hot-warm or hot-cold architecture at HSBC? Switch of DCs?
+
+How would I architecture an application with market data?
+Following up? How would I implement a P&L engine that updates positions based on market data?
+Caches, Structures - Talked about Queue, Thread polling and Map with positions, notifications to the UI
+
+Explain the sychronized keyword. What resource does it lock? The Monitor of the object
+
+Difference between final / finally / finalize
+
+Stewardship -> Tell me about a situation where you improved something and left a legacy
+HSBC -> Update of the procedure to set up the clusters and documented it
+
+Tell me about a situation where I challenged established approaches and methodologies
+At BLK the gitflow and the way we used master branches
+
+Control environment -> Pull requests and reviews
+
+Tech debt and managing stakeholders -> open dialogue
+
+My Areas of interest? ML + Quantitative
+
+A word to describe yourself : Curious

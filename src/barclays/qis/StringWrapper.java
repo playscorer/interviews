@@ -1,4 +1,4 @@
-package barclays;
+package barclays.qis;
 
 import java.util.*;
 
@@ -138,10 +138,6 @@ import java.util.*;
  * ("Sandwich", "Quesadilla")
  *
  */
-public class QuantitativeISScreening {
-    //
-}
-
 final class StringWrapper {
     private String data;
 

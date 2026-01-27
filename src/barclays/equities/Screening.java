@@ -1,4 +1,4 @@
-package barclays;
+package barclays.equities;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -63,7 +63,7 @@ import java.util.function.Function;
  *
  * Maven phases
  */
-public class EquitiesTradingScreening {
+public class Screening {
 
     public record User(String name, Integer age) {}
 
