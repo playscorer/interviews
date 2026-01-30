@@ -27,13 +27,12 @@ public class Exercise1 {
      *         and storage units
      */
     public static long calcMinimumExpenditure(int vmCost, int storageCost, int combinedCost, int x, int y) {
-        long ans = Long.MAX_VALUE;
-        ans = Math.min(ans, (long) x * vmCost + (long) y * storageCost);
-        long min = Math.min(x, y);
-        ans = Math.min(ans, min * combinedCost + (long) (x - min) * vmCost+ (long) (y - min) * storageCost);
-        long max = Math.max(x, y);
-        ans = Math.min(ans, max * combinedCost + (long) Math.max(0, x - max) * vmCost + (long) Math.max(0, y - max) * storageCost);
-        return ans;
+        long normal = (long) x  * vmCost + (long) y * storageCost;
+        long combinedMin = (long) Math.min(x, y) * combinedCost
+                + (long) (x - Math.min(x, y)) * vmCost + (long) (y - Math.min(x, y)) * storageCost;
+        long combinedMax = (long) Math.max(x, y) * combinedCost
+                + (long) Math.max(0, x - Math.max(x, y)) * vmCost + (long) Math.max(0, y - Math.max(x, y)) * storageCost;
+        return Math.min(normal, Math.min(combinedMin, combinedMax));
     }
 
     public static void main(String[] args) {
@@ -51,4 +50,5 @@ public class Exercise1 {
         y = 3;
         System.out.println(calcMinimumExpenditure(vmCost, storageCost, combinedCost, x, y));
     }
+
 }

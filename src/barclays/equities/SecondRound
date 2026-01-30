@@ -1,5 +1,5 @@
-Interview with Charles Xeller on Thursday 22nd of Jan 2026
-----------------------------------------------------------
+Interview with Charles Xeller (Convertible Trading) on Thursday 22nd of Jan 2026
+--------------------------------------------------------------------------------
 
 Talk about yourself
 
@@ -13,7 +13,7 @@ Explain HealthCheck and the RTT inputs
 Was it at hot-hot, hot-warm or hot-cold architecture at HSBC? Switch of DCs?
 
 How would I architecture an application with market data?
-Following up? How would I implement a P&L engine that updates positions based on market data?
+Following up? How would I implement a P&L calculator that updates positions based on market data?
 Caches, Structures - Talked about Queue, Thread polling and Map with positions, notifications to the UI
 
 Explain the sychronized keyword. What resource does it lock? The Monitor of the object
