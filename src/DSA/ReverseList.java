@@ -32,6 +32,7 @@ public class ReverseList {
 
         ListNode prev=head;
         ListNode cur=head.next;
+        head.next=null;
 
         while (cur != null) {
             ListNode next = cur.next;
@@ -40,7 +41,6 @@ public class ReverseList {
             cur = next;
         }
 
-        head.next=null;
         return prev;
     }
 
@@ -54,6 +54,7 @@ public class ReverseList {
         ListNode prev = head;
         ListNode cur = head.next;
         head.next = null;
+
         while (cur.next != null) {
             head = cur.next;
             cur.next = prev;

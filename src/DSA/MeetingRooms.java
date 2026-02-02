@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
  * after a break of week, and having no idea how to solve it before!
  */
 public class MeetingRooms {
-    // MeetingRooms 1 - Easy
     public boolean canAttendMeetings(int[][] intervals) {
         List<int[]> list = Arrays.asList(intervals);
         List<Map.Entry<Integer, Integer>> newList
@@ -20,21 +19,5 @@ public class MeetingRooms {
         }
 
         return true;
-    }
-
-    // MeetingRooms - Medium (could not solve it)
-    public int minMeetingRooms(int[][] intervals) {
-        Arrays.sort(intervals, (i1, i2) -> i1[0] - i2[0]);
-
-        // we need the SOONEST available room
-        PriorityQueue<Integer> meetingRooms = new PriorityQueue<>();
-        for (int i=0; i<intervals.length; i++) {
-            if (!meetingRooms.isEmpty() && meetingRooms.peek() <= intervals[i][0]) {
-                meetingRooms.poll();
-            }
-            meetingRooms.offer(intervals[i][1]);
-        }
-
-        return meetingRooms.size();
     }
 }

@@ -6,7 +6,7 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * Server Memory Allocation - Problem quite similar to Leetcode 455. Assign Cookies.
+ * Server Memory Allocation - Problem quite similar to Leetcode 455 - Assign Cookies
  *
  * Given n programs and n - 1 servers, each program must run on its own server,
  * and each server can handle only one program. Each program has a memory
