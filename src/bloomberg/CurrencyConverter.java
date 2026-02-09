@@ -9,7 +9,7 @@ import java.util.*;
  * Time Complexity is O (fromCurrencies + toCurrencies + fromCurrencies) = O (V + E)
  * It means at most all vertices (or nodes/currencies) and all edges (or rates) are visited.
  * I got confused with DFS + Backtracking
- *   -> You are not choosing how to visit a node — only whether a path exists.
+ *   -> You are not choosing how to visit a node — only whether a path exists (Path enumeration Vs. Reachability).
  *
  * “If I make a wrong choice, do I need to undo it to try another?”
  *  Currency conversion → No
