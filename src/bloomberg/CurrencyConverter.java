@@ -7,13 +7,13 @@ import java.util.*;
  * 2/9/2026 - Interview Round 1 for Trade Execution
  *
  * Time Complexity is O (fromCurrencies + toCurrencies + fromCurrencies) = O (V + E)
- * It means at most all vertices (or nodes/currencies) and all edges (or rates) are visited.
+ *   -> at most all vertices (or nodes/currencies) and all edges (or rates) are visited
  * I got confused with DFS + Backtracking
  *   -> You are not choosing how to visit a node — only whether a path exists (Path enumeration Vs. Reachability).
  *
- * “If I make a wrong choice, do I need to undo it to try another?”
- *  Currency conversion → No
- *  Word Search → Yes
+ * Simple traversal (BFS/DFS) -> "Is there a path?"
+ * Backtracking -> "Find all paths" / "Path with constraints"
+ *
  */
 public class CurrencyConverter {
 
