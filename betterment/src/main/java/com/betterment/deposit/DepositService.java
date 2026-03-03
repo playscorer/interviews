@@ -13,6 +13,8 @@ import java.util.logging.Logger;
 public class DepositService {
 
     /*
+     * Interview with Kyle Copeland on March 3, 2026
+     *
      * $100
      *
      * 50% x $100 = $50

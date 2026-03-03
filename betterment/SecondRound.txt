@@ -1,0 +1,39 @@
+System Design Problem with Charles Frantz on March 3, 2026
+----------------------------------------------------------
+
+I had to design the recurring deposits:
+Weekly — a fixed deposit made every week, e.g. every Monday
+Bi-weekly — every two weeks (26 times per year), common for paycheck-aligned investing
+Semi-monthly — twice a month on fixed dates, e.g. the 1st and 15th (24 times per year)
+Monthly — once a month on a set date (12 times per year)
+
+Users - 1MM
+Features :
+- Show upcoming deposits
+- Execute deposits
+
+Design I suggested:
+
+
+GUI <-> |Auth| <-> ConfiguratorService
+                        |
+                        | (bi-directional)
+                        |
+          DB Backup  |  DB --> SchedulerService --> QUEUE <-- DepositService (3rd party)
+
+After designing the high level architecture, I was asked to dive deep in:
+- SQL tables:
+    - user(id, name)
+    - userDeposit(id, deposit_type, user_id)
+    - weeklyDeposit(id, day_of_week, amount, user_id)
+    - biWeeklyDeposit(id, start-day, day_of_week, amount, user_id)
+    - semiMonthly(id, day1, day2, amount, user_id)
+    - monthly(id, day_of_amount, user_id)
+
+Also on the SchedulerService and which queries it would execute:
+- SELECT * FROM weekly where day_of_week = date UNION... UNION... UNION SELECT * FROM monthly
+
+The SchedulerService would run every day at 8PM to collect the deposits for the following day for all users
+and would push them to the queues.
+
+The ConfiguratorService would run every day to collect the deposits per user, and show them on the GUI.
