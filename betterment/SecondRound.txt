@@ -35,5 +35,6 @@ Also on the SchedulerService and which queries it would execute:
 
 The SchedulerService would run every day at 8PM to collect the deposits for the following day for all users
 and would push them to the queues.
+The DepositService would poll those queues to execute the transactions.
 
 The ConfiguratorService would run every day to collect the deposits per user, and show them on the GUI.
