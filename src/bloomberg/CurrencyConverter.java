@@ -4,7 +4,7 @@ import java.util.*;
 
 /**
  *
- * 2/9/2026 - Interview Round 1 for Trade Execution
+ * Rio de Janeiro 2/9/2026 - Interview Round 1 for Trade Execution
  *
  * Time Complexity is O (fromCurrencies + toCurrencies + fromCurrencies) = O (V + E)
  *   -> at most all vertices (or nodes/currencies) and all edges (or rates) are visited
@@ -58,13 +58,12 @@ public class CurrencyConverter {
                     if (!visited.contains(interCurrency)) {
                         System.out.println("getConversionRatio: " + fromCurrency + " -> " + interCurrency);
                         double rate =
-                                pairCurrency.getValue() * dfs(pairCurrency.getKey(), toCurrency, visited);
+                                pairCurrency.getValue() * dfs(interCurrency, toCurrency, visited);
                         if (rate != -1) {
                             return rate;
                         }
                     }
                 }
-                // backtrack
             }
         }
         return -1.0;

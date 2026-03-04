@@ -1,0 +1,14 @@
+First Round for the Buy Side on 3/4/2026 - NYC
+----------------------------------------------
+
+Coding Problem 1:
+- Check Parenthesis
+
+Coding Problem 2:
+- Merge Intervals
+- Follow up 1: what if we have 2 schedules of events (intervals) and we want to find the time I am free?
+- Follow up 2: what if I had a conference room to that?
+
+I thought the interviewer, Danielle, was not very clear with the follow up questions.
+- I answered to the 1st follow up, I'd merge the events of both schedules and would like at the free times.
+- I answered to the 2nd follow up, I'd sort start and end times, and would count whenever start < end means I need a room.
