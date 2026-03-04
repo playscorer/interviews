@@ -4,10 +4,83 @@ First Round for the Buy Side on 3/4/2026 - NYC
 Coding Problem 1:
 - Check Parenthesis
 
+    /*
+     * Complete the 'check_parentheses' function below.
+     *
+     * The function is expected to return a BOOLEAN.
+     * The function accepts STRING data as parameter.
+     */
+
+    public static boolean check_parentheses(String data) {
+        LinkedList<Character> queue = new LinkedList<>();
+        // X
+        // [{
+        // [
+        // [{
+        // [{(
+        // [{((
+        // [{(
+        // [{
+        // [
+        //
+
+        for (int i=0; i<data.length(); i++) {
+            char c = data.charAt(i);
+
+            if (c == '[' || c == '{' || c == '(') {
+                queue.push(c);
+            } else if (c == ']' || c == '}' || c == ')') {
+                if (c == queue.peekLast()) { // THIS IS WRONG!!! I NEED TO COMPARE TO THE MATCHING OPEN PARENTHESIS
+                    queue.pollLast();
+                }
+            }
+
+        }
+
+        if (queue.isEmpty()) {
+            return true;
+        }
+
+        return false;
+    }
+
 Coding Problem 2:
 - Merge Intervals
 - Follow up 1: what if we have 2 schedules of events (intervals) and we want to find the time I am free?
 - Follow up 2: what if I had a conference room to that?
+
+public List<int[]> busyView(List<int[]> events) {
+    Collections.sort(events, (a, b) -> a[0] - b[0]);
+
+    LinkedList<int[]> intervals = new LinkedList<>();
+
+    for (int[] event : events) {
+        if (intervals.isEmpty() || event[0] <= intervals.peek()[1]) { // CONDITION SHOULD BE !intervals.isEmpty() && ...
+            intervals.push(new int[] {intervals[0], Math.max(events[1], intervals.peek()[1])}); // NEED TO POLL FIRST
+            // AND IT SHOULD BE intervals.push(new int[] {intervals.peek()[0], Math.max(event[1], intervals.peek()[1])});
+            // BUT BC IT HAS TO BE POLLED FIRST THAT SHOULD BE
+                int[] interval = intervals.pop();
+                intervals.push(new int[] {interval[0], Math.max(event[1], interval[1])});
+        } else {
+            intervals.push(new int[] {event[0], event[0]}); // SHOULD BE intervals.push(event) or intervals.push(new int[] {event[0], event[1]})
+        }
+    }
+
+    return intervals;
+}
+
+class Schedule {
+
+    List<int[]> events;
+
+}
+
+Schedule A
+Schedule B = []...
+
+
+
+Conference Room = []
 
 I thought the interviewer, Danielle, was not very clear with the follow up questions.
 - I answered to the 1st follow up, I'd merge the events of both schedules and would like at the free times.
