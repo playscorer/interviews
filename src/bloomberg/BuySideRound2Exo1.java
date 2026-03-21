@@ -3,26 +3,28 @@ package bloomberg;
 import java.util.ArrayDeque;
 import java.util.PriorityQueue;
 
-/*
-Imagine you are a Front Office trader, whose job is to execute trades efficiently as instructed by Portfolio Managers.
-The largest trades should be executed first. Once in a while, compliance may ask you about the minimal trade you have
-that is not yet executed.
-
-Implement a data structure that supports the following operations:
-
-- addTrade(int amount)      : adds a trade
-- executeTrade()            : executes a trade and returns the trade amount
-- extractMinTrade()         : returns the amount of the minimal trade not yet executed
-
-addTrade(13), addTrade(11), addTrade(9), addTrade(20)
-extractMin() -> 9
-
-executeTrade() -> 20
-extractMin() -> 9
-
-executeTrade() -> 9
-extractMin() -> 11
-*/
+/**
+ * Second Round for the Buy Side on 3/19/2026 - NYC
+ *
+ * Imagine you are a Front Office trader, whose job is to execute trades efficiently as instructed by Portfolio Managers.
+ * The largest trades should be executed first. Once in a while, compliance may ask you about the minimal trade you have
+ * that is not yet executed.
+ *
+ * Implement a data structure that supports the following operations:
+ *
+ * - addTrade(int amount)      : adds a trade
+ * - executeTrade()            : executes a trade and returns the trade amount
+ * - extractMinTrade()         : returns the amount of the minimal trade not yet executed
+ *
+ * addTrade(13), addTrade(11), addTrade(9), addTrade(20)
+ * extractMin() -> 9
+ *
+ * executeTrade() -> 20
+ * extractMin() -> 9
+ *
+ * executeTrade() -> 9
+ * extractMin() -> 11
+ */
 public class BuySideRound2Exo1 {
     ArrayDeque<Integer> executionQueue = new ArrayDeque<>(); // LIFO
     PriorityQueue<Integer> minInQueue = new PriorityQueue<>();
