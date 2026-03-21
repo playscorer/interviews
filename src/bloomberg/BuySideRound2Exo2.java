@@ -45,6 +45,10 @@ public class BuySideRound2Exo2 {
      * visited → airports already visited → O(V)
      * path → current route → O(V)
      * recursion stack → depth of DFS → O(V)
+     *
+     * If routes are stored instead of printed, then:
+     * Space = O(P × V)
+     * which can become O(V! × V)
      */
     private void showRoutes(String departure, String arrival) {
         String indent = "  ".repeat(depth);
