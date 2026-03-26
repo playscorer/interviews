@@ -45,7 +45,7 @@ public class App {
         }
 
         /**
-         * Getters needed to produce JSON output
+         * Getters needed to produce JSON output (I failed to add them during the interview...)
          */
         public double getTotalSpend() {
             return totalSpend;
