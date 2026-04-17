@@ -113,10 +113,7 @@ public class Round1 {
         System.out.println(list.contains(p1)); // true
 
         /**
-         * Return the person having made the max in sales.
-         * Return the department having made the max in sales.
-         *
-         * Java and SQL
+         * Given the following data :
          *
          * D1 -> A1 250, A2 350 -> 600
          * D2 -> B1 55, B2 75 -> 130
@@ -126,10 +123,13 @@ public class Round1 {
                 new Person("B1", "D2", 55),
                 new Person("B2", "D2", 75));
 
-        // Person having done max sales (I wanted to use a PriorityQueue by offering each element at a time)
-        // this is an overkill for a one-time max — O(n log n) vs O(n) for old school method or heapify
-        // offer & poll are O(log n) - n being the size of the heap
-        // heapify - new PriorityQueue(collection) is O(n), but adding n elements one by one via offer() is O(n log n)
+        /**
+         * Return the person having made the max in sales.
+         * (I wanted to use a PriorityQueue by offering each element at a time)
+         * this is an overkill for a one-time max — O(n log n) vs O(n) for old school method or heapify
+         * offer & poll are O(log n) - n being the size of the heap
+         * heapify - new PriorityQueue(collection) is O(n), but adding n elements one by one via offer() is O(n log n)
+         */
         Person person = people.stream()
                 .max(Comparator.comparingDouble(Person::sales))
                 .orElseThrow();
@@ -140,8 +140,10 @@ public class Round1 {
             WHERE sales = (SELECT MAX(sales) FROM Person);
          */
 
-        // Dept having done max sales
-        // {"D1": 600.0, "D2": 130.0}
+        /**
+         * Return the department having made the max in sales.
+         * {"D1": 600.0, "D2": 130.0}
+         */
         String dept = people.stream()
                 .collect(Collectors.groupingBy(Person::department,
                         Collectors.summingDouble(Person::sales)))
