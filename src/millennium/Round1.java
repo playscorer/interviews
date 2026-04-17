@@ -141,9 +141,10 @@ public class Round1 {
          */
 
         // Dept having done max sales
+        // {"D1": 600.0, "D2": 130.0}
         String dept = people.stream()
                 .collect(Collectors.groupingBy(Person::department,
-                        Collectors.summingDouble(Person::sales))) // {"D1": 600.0, "D2": 130.0}
+                        Collectors.summingDouble(Person::sales)))
                 .entrySet().stream()
                 .max(Map.Entry.comparingByValue())
                 .map(Map.Entry::getKey)
