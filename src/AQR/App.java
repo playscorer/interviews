@@ -27,8 +27,8 @@ public class App {
 
         @Override
         public boolean equals(Object obj) {
-            Transaction transaction = (Transaction) obj;
-            return this.transactionId.equals(transaction.transactionId);
+            if (!(obj instanceof Transaction other)) return false;
+            return transactionId.equals(other.transactionId);
         }
     }
 
