@@ -86,11 +86,11 @@ public class Screening {
 
         /*
             PECS: Producer Extends, Consumer Super - tells you which wildcard to use:
-            Producer Extends: If you're reading/getting (read-only) from a collection (it produces items) → use <? extends T>
-            Consumer Super: If you're writing/adding (write-only) to a collection (it consumes items) → use <? super T>
+            ? extends T — you READ from it (producer)
+            ? super T — you WRITE to it (consumer)
          */
 
-        // Mental model: "I don't know the exact type, but I know everything I get OUT will be at least a Number"
+        // You can GET out a Number safely. You cannot PUT in because the compiler doesn't know if it's a List<Integer>, List<Double>, or List<Float>.
         List<? extends Number> nums = new ArrayList<Integer>();
         //Number n = nums.get(0);
         // it does not compile - Java doesn't know the exact type, so it prevents all additions
@@ -100,7 +100,8 @@ public class Screening {
         new ArrayList<Double>();
         new ArrayList<Long>();
 
-        // Mental model: "I don't know the exact type, but I know it can safely hold any Integer I put IN"
+        // You can PUT in an Integer safely because whatever the list holds (Integer, Number, or Object) can always accept an Integer.
+        // But when you GET out, all the compiler can guarantee is Object.
         List<? super Integer> ints = new ArrayList<Number>();
         ints.add(2);
         // does not compile
