@@ -2,5 +2,9 @@
 /.settings/
 /.classpath
 /.project
-/betterment/target/
+**/target/
 /interviews.iml
+.idea/
+**/.idea/
+.claude/
+**/.bsp/
