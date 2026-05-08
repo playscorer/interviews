@@ -1,0 +1,72 @@
+Interview with Eric Wasserman on May 4th, 2026
+----------------------------------------------
+
+-> Rejected :
+Eric shared feedback that he enjoyed the conversation for you but felt some of the answers provided were missing
+the mark for him in terms of knowledge and experience. He said although his interviews are conversational in nature,
+he is looking for thorough answers, with in depth detail that show examples of doing what he is asking about.
+
+My problem : guessing instead of getting to the root cause of the problem first in a structured way
+Identifying bottlenecks before deciding how to fix the problem.
+
+General technical conversation :
+- SRE vs DevOps vs Production Support? I said SRE it is a fancy name, DevOps focused on CI/CD
+and Product Support is L2 support by developers.
+- What made Aladdin so powerful?
+- News in Java 17 I like : Records (Java 16), Pattern Matching for Switch
+- Testing using dependency injection for Mocks (Mockito)
+- Concepts of OOP : loose coupling / high encapsulation (forgot to talk about polymorphism, inheritance, abstraction)
+- OMS design : I dove straight to optimize without knowing the bottleneck
+- Monitoring tools? I said use of the flightRecorder and Java Mission Control (needed to be more specific)
+I use a profiler tool to compare a head dump by making a diff between/after execution of a function/call to API...
+I establish the base line, I send requests, and then trigger a GC. I take a head dump before and after the requests. App is starting fresh.
+Circular references are the reason of memory leaks.
+Spring Actuator with Prometheus & Grafana can be used for monitoring. Tools like Visual VM, JMC, or GC logs for the details of the Heap.
+- Kernel Bypass : avoid context switching between user space and kernel space (Use of JavaUnsafe & Solarflare OpenOnload)
+I talked about ByteBuffer.allocateDirect() that allocates out of Heap
+- Other optimization technics : I said tweaking the JVM params like -vmsargs -Xmx -Xms -XX+SurvivorRatio
+Other parms :
+-XX:MaxGCPauseMillis=20        # soft pause target for G1
+-XX:InitiatingHeapOccupancyPercent=10  # when G1 starts concurrent marking
+-XX:MaxTenuringThreshold=8     # how many GC cycles before promotion
+-XX:NewRatio=5                 # ratio of old to young generation
+-XX:SurvivorRatio=10           # ratio of survivor to eden space
+- What about readibility of Lambdas (functional programming)
+- I said Lazy Loading for @Autowired vs @Constructor whereas it is mostly about immutability
+- I said Dependency Injection (DI) is hard to read
+
+DMA Kernel Mechanics
+--------------------
+
+When packets are arriving from the network :
+
+Normal path:
+  NIC (network card) --DMA--> kernel space (network socket buffers sk_buff) --> copy --> user space buffer
+
+Kernel bypass (DPDK / OpenOnload):
+  NIC (network card) --DMA--> user space buffer directly (all network stack is moved into user space)
+
+When the network stack moves to user space, the NIC can be given the physical address of your user space buffer directly,
+so it writes the packet there without any CPU involvement in the transfer.
+The copy disappears. The latency drops. The CPU stays free (can be done with SolarFlare OpenOnLoad / DPDK).
+
+Without kernel bypass, the NIC still does DMA but into kernel buffers.
+You still have to copy from there into user space, which is the hop you are eliminating.
+
+ByteBuffer.allocateDirect (in Java) reduces copies within the JVM I/O path but you are still going through the kernel.
+Completely different level of the stack (allocation off heap in a fixed location vs dynamic in heap because of GC).
+
+Kernel bypass alone:
+  NIC → user space buffer (off-heap) → copy to JVM heap → app reads
+
+Kernel bypass + allocateDirect:
+  NIC → user space buffer (off-heap) → app reads directly
+                                        (no heap copy)
+
+Without allocateDirect, your app still needs to copy the data from the off-heap NIC buffer into a heap byte[] for the JVM to work with it normally.
+That is an extra copy you want to eliminate.
+So doing both is the right instinct — kernel bypass removes the kernel copy, allocateDirect removes the heap copy.
+
+So in practice:
+- If using OpenOnload — it works transparently at the socket level, so allocateDirect + socket reads gets you most of the benefit cleanly from Java
+- If using DPDK via JNI — you manage native buffers yourself, ByteBuffer.wrap() over native memory, and never touch the heap at all

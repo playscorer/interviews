@@ -1,0 +1,9 @@
+Interview with Syed Umar on May 4th, 2025
+=========================================
+
+Idempotency in message driven architecture? Unique IDs
+What are the challenges of debugging event driven architectures?
+I said it is non deterministic because it is asynchronous.
+How do I handle backward compatibility in REST APIs? Versions (I failed to reply)
+How do you handle monitoring in microservices? I talked about Grafana and Prometheus (missed Springboot Actuator)
+How many ppl have I led?
