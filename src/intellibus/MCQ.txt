@@ -1,0 +1,54 @@
+MCQ with Syed Umar on May 11th, 2025
+====================================
+
+Train problem
+Let t = minutes after Train A starts that they meet. Train B starts at t=5, so it travels (t-5) minutes.
+Distance covered must sum to 50km:
+
+A: 90 × (t/60)
+B: 50 × ((t-5)/60)
+
+90(t/60) + 50((t-5)/60) = 50
+→ 90t + 50t - 250 = 3000
+→ 140t = 3250
+→ t = 23.2 minutes ≈ 23 min 12 sec after Train A starts.
+
+--
+
+int x = 10;
+Supplier<Integer> s = () -> x + 5;
+Result of s.get() → 15
+
+--
+
+exec 3>
+Redirects file descriptor 3 to a file (or opens it for writing).
+Linux processes have stdin(0), stdout(1), stderr(2) by default.
+exec 3>file.txt opens fd 3 as a writable file descriptor for the current shell session.
+You can then write to it with echo "foo" >&3.
+
+--
+
+ps -eaf | grep redis | wc -l
+Returns the count of lines matching "redis" in the process list — including the grep process itself.
+So if 1 redis instance is running, you'll likely see 2 (the redis process + the grep process).
+
+--
+
+awk -F","
+Sets the field separator to comma. So $1, $2, etc. split on , instead of whitespace. Classic CSV parsing with awk.
+
+--
+
+sort -x — not valid. No such option. Would throw an error.
+
+--
+
+sort -z — valid. Terminates lines with a null character (\0) instead of newline.
+Useful when filenames or data contain spaces/newlines. Often paired with xargs -0.
+
+--
+
+tr -d
+Deletes characters. tr -d 'aeiou' removes all vowels from input. tr -d '\n' strips newlines.
+The -d flag means delete, no replacement.
