@@ -1,0 +1,16 @@
+Design HashMap
+Shortest Word Distance (reviewed)
+Shortest Distance Between Two Strings
+Longest Substring Without Repeating Characters
+Minimum Window Substring (reviewed - it is hard)
+Minimum Size Subarray Sum
+Highest Average Score
+Longest Uniform Substring
+IPAddresses
+Find the Duplicate Number
+Find the Second Smallest Element In The Array
+TrainMap
+CurrencyConverter (reviewed)
+Show All Airport Routes (reviewed)
+Find Minimum in Rotated Sorted Array
+Search in Rotated Sorted Array
