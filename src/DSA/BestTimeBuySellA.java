@@ -24,31 +24,20 @@ public class BestTimeBuySellA {
      */
     public static int bestTimeBuySellA(int[] prices) {
         int min=Integer.MAX_VALUE;
-        int dayMin=0;
-        int max=Integer.MIN_VALUE;
-        int dayMax=0;
+        int maxProfit=0;
 
         for (int i=0; i<prices.length; i++) {
+            // find the minimum price
             if (min > prices[i]) {
                 min = prices[i];
-                dayMin = i;
+            }
+            // calculate the profit
+            else if (maxProfit < prices[i] - min) {
+              maxProfit = prices[i] - min;
             }
         }
 
-        for (int i=dayMin+1; i<prices.length; i++) {
-            if (max < prices[i]) {
-                max = prices[i];
-                dayMax = i;
-            }
-        }
-
-        System.out.println("dayMin: " + dayMin + " dayMax: " + dayMax + " min: " + min + " max: " + max);
-
-        if (dayMin < dayMax) {
-            return max-min;
-        }
-
-        return 0;
+        return maxProfit;
     }
 
     public static int bestTimeBuySellA2(int [] prices) {
@@ -64,17 +53,20 @@ public class BestTimeBuySellA {
     }
 
     public static void main(String[] args) {
-        int[] wrong = {2,4,1};
-        System.out.println(bestTimeBuySellA(wrong));
-        // returns 0 and should return 2
+        int[] ex0 = {2,4,1};
+        System.out.println(bestTimeBuySellA(ex0));
+        System.out.println(bestTimeBuySellA2(ex0));
 
         int[] ex1 = {7, 1, 5, 3, 6 ,4};
+        System.out.println(bestTimeBuySellA(ex1));
         System.out.println(bestTimeBuySellA2(ex1));
 
         int[] ex2 = {7, 6, 4, 3 ,1};
+        System.out.println(bestTimeBuySellA(ex2));
         System.out.println(bestTimeBuySellA2(ex2));
 
         int[] ex3 = {170, 175, 172, 178, 180};
+        System.out.println(bestTimeBuySellA(ex3));
         System.out.println(bestTimeBuySellA2(ex3));
     }
 

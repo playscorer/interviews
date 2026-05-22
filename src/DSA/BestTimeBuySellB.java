@@ -29,19 +29,36 @@ public class BestTimeBuySellB {
      *
      */
     public static int bestTimeBuySellB(int[] prices) {
-        int length = prices.length;
         int profit=0;
 
-        for (int i=0; i<length-1; i++) {
-            //if (prices[i] < prices[i+1]) {
-                profit += Math.max(0, prices[i+1]-prices[i]);
-            //}
+        for (int i=1; i<prices.length; i++) {
+            if (prices[i-1] < prices[i]) {
+                profit += prices[i]-prices[i-1];
+            }
         }
 
         return profit;
     }
 
     public static int bestTimeBuySellB2(int[] prices) {
+        int total=0;
+        int localMin=Integer.MAX_VALUE;
+        int localMax=localMin;
+
+        for (int i=0; i<prices.length; i++) {
+            if (prices[i] < localMax) {
+                total += localMax - localMin;
+                localMin = prices[i];
+                localMax = localMin;
+            } else {
+                localMax = prices[i];
+            }
+        }
+        total += localMax - localMin;
+        return total;
+    }
+
+    public static int bestTimeBuySellB3(int[] prices) {
         int [][] dp = new int[prices.length][2];
         return f(0, prices, dp, 1);
     }
@@ -63,12 +80,14 @@ public class BestTimeBuySellB {
 
     public static void main(String[] args) {
         int[] ex1 = {7, 1, 5, 3, 6 ,4};
-        //System.out.println(bestTimeBuySellB(ex1));
+        System.out.println(bestTimeBuySellB(ex1));
         System.out.println(bestTimeBuySellB2(ex1));
+        System.out.println(bestTimeBuySellB3(ex1));
 
         int[] ex2 = {7, 6, 4, 3 ,1};
-        //System.out.println(bestTimeBuySellB(ex2));
+        System.out.println(bestTimeBuySellB(ex2));
         System.out.println(bestTimeBuySellB2(ex2));
+        System.out.println(bestTimeBuySellB3(ex2));
     }
 
 }
