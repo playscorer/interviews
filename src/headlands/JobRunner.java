@@ -74,13 +74,14 @@ public class JobRunner {
         Map<Integer, Job> mapJobs = new LinkedHashMap<>();
 
         try (Scanner scanner = new Scanner(System.in)) {
-            if (!scanner.hasNextLine() || !scanner.nextLine().equals("#job_id,runtime_in_seconds,next_job_id")) {
+            if (!scanner.hasNextLine() || !scanner.nextLine().trim().equals("#job_id,runtime_in_seconds,next_job_id")) {
                 System.out.println("Malformed Input");
                 return;
             }
 
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
+                line = line.trim();
 
                 // Split row by commas
                 String[] values = line.split(",");
