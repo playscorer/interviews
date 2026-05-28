@@ -180,7 +180,7 @@ public class JobRunner {
         3,12,23
         23,30,0
 
-        Test 3 : Cycle (Marformed)
+        Test 3 : Cycle (Performed)
         #job_id,runtime_in_seconds,next_job_id
         1,60,2
         2,23,1
