@@ -1,5 +1,6 @@
 package headlands;
 
+import java.time.Duration;
 import java.util.*;
 
 /**
@@ -146,9 +147,10 @@ public class JobRunner {
     }
 
     public static String toHMS(long seconds) {
-        long h = seconds / 3600;
-        long m = (seconds % 3600) / 60;
-        long s = seconds % 60;
+        Duration duration = Duration.ofSeconds(seconds);
+        long h = duration.toHours();
+        long m = duration.toMinutesPart();
+        long s = duration.toSecondsPart();
         return String.format("%02d:%02d:%02d", h, m, s);
     }
 
@@ -162,5 +164,25 @@ public class JobRunner {
         but I get easily stuck in the middle of my reasoning and do not push it through by actually trying a specific case on paper.
         I should write pseudocode.
         I should exclude edge cases from the start to assume my input is correctly formed.
+
+        Test 1 : Chain of 3 elements
+        #job_id,runtime_in_seconds,next_job_id
+        1,60,23
+        2,23,3
+        3,12,14
+        14,15,0
+        23,30,0
+
+        Test 2 : Shared nodes across chains (Malformed)
+        #job_id,runtime_in_seconds,next_job_id
+        1,60,23
+        2,23,3
+        3,12,23
+        23,30,0
+
+        Test 3 : Cycle (Marformed)
+        #job_id,runtime_in_seconds,next_job_id
+        1,60,2
+        2,23,1
      */
 }
