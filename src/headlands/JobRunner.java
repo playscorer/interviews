@@ -102,22 +102,28 @@ public class JobRunner {
         Set<Integer> visited = new HashSet<>();
 
         // We could also ignore all non starters by checking in a list of nextJobIds
+        // And return Malformed whenever we revisit a node (shared nodes across chains)
         for (Integer id : mapJobs.keySet()) {
             int startJobId = id;
             int lastJobId = id;
             int count = 0;
             int totalRuntime = 0;
 
+            boolean complete = false;
             int curId=id;
-            if (!visited.contains(curId)) {
-                while (curId != 0) {
-                    visited.add(curId);
-                    Job curJob = mapJobs.get(curId);
-                    lastJobId = curId;
-                    count++;
-                    totalRuntime += curJob.runtime();
-                    curId = curJob.nextJobId();
+            while (curId != 0) {
+                Job curJob = mapJobs.get(curId);
+                if (visited.contains(curId)) {
+                    break;
                 }
+                visited.add(curId);
+                lastJobId = curId;
+                count++;
+                totalRuntime += curJob.runtime();
+                curId = curJob.nextJobId();
+                if (curId == 0) complete = true;
+            }
+            if (complete) {
                 reportList.add(new long[]{startJobId, lastJobId, count, totalRuntime});
             }
         }
@@ -150,9 +156,11 @@ public class JobRunner {
         I messed up during the assessment. Although my tests pass, I iterated through a list of sortedJobIds by runtime desc,
         not containing the endJobs (nextId == 0).
         That means I only ignore the final jobs in my list, but I'd reprocess intermediate ones when chains are longer than 2.
+        I sort initially and not at the end based on the total time.
 
         Problems I still see : I stress out and do not read thoroughly the description of the problem. Then I have the idea,
         but I get easily stuck in the middle of my reasoning and do not push it through by actually trying a specific case on paper.
         I should write pseudocode.
+        I should exclude edge cases from the start to assume my input is correctly formed.
      */
 }
