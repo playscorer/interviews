@@ -107,7 +107,6 @@ public class JobRunner {
             int lastJobId = id;
             int count = 0;
             int totalRuntime = 0;
-            int avgRuntime = 0;
 
             int curId=id;
             if (!visited.contains(curId)) {
@@ -117,10 +116,9 @@ public class JobRunner {
                     lastJobId = curId;
                     count++;
                     totalRuntime += curJob.runtime();
-                    avgRuntime = totalRuntime / count;
                     curId = curJob.nextJobId();
                 }
-                reportList.add(new long[]{startJobId, lastJobId, count, totalRuntime, avgRuntime});
+                reportList.add(new long[]{startJobId, lastJobId, count, totalRuntime});
             }
         }
 
@@ -152,5 +150,9 @@ public class JobRunner {
         I messed up during the assessment. Although my tests pass, I iterated through a list of sortedJobIds by runtime desc,
         not containing the endJobs (nextId == 0).
         That means I only ignore the final jobs in my list, but I'd reprocess intermediate ones when chains are longer than 2.
+
+        Problems I still see : I stress out and do not read thoroughly the description of the problem. Then I have the idea,
+        but I get easily stuck in the middle of my reasoning and do not push it through by actually trying a specific case on paper.
+        I should write pseudocode.
      */
 }
