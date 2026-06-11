@@ -34,7 +34,7 @@ import java.util.function.Function;
  *         Number n = nums.get(0);
  *         nums.add(10);
  *
- * Spring @AutoEnabledConfig
+ * Spring @EnableAutoConfiguration
  *
  * Spring application startup events are fired in a defined, predictable sequence.
  *
