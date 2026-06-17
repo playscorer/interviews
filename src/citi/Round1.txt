@@ -1,0 +1,158 @@
+======================================
+Jeffersonton, VA - Thursday, June 11th
+with Vasily Kukhta
+======================================
+
+* What would be a good structure for a single-threaded producer and single-threaded consumer in the same JVM?
+
+For simplicity — ArrayBlockingQueue or LinkedBlockingQueue. Both work correctly.
+For performance — ring buffer with volatile indices. Zero locking, zero CAS overhead.
+
+For lock-free single producer/single consumer the pattern is a ring buffer with two indices — head (consumer reads)
+and tail (producer writes):
+
+    volatile int head = 0; // consumer owns this
+    volatile int tail = 0; // producer owns this
+    Object[] buffer = new Object[SIZE];
+
+    // producer
+    buffer[tail % SIZE] = item;
+    tail++;
+
+    // consumer
+    if (head != tail) {
+        Object item = buffer[head % SIZE];
+        head++;
+    }
+
+* What technics for lock free apart from Atomic CAS?
+
+CAS (Compare-And-Swap)
+Volatile reads/writes
+Immutable objects + volatile reference
+Thread confinement (Eliminate sharing entirely — each thread owns its data exclusively. No synchronization needed because no shared state.):
+    ThreadLocal — each thread has its own copy
+    Actor model — each actor processes messages on its own thread, no shared state
+    Single-writer principle — Disruptor, each field owned by exactly one thread
+Copy-on-write — reads lock-free, writes copy entire array
+
+* How to process market data without consumer polling?
+
+BlockingQueue + dedicated consumer thread - Consumer blocks on queue.take() — wakes up exactly when data arrives. No polling.
+Observer / Listener pattern - Producer calls listeners directly when data arrives. No queue, no polling.
+Disruptor — event-driven ring buffer
+Solace/Aeron push model - Broker pushes data to consumer via callback.
+
+* How to signal backpressure to a producer?
+
+BlockingQueue.put() — Producer blocks when queue is full
+offer() with rejection handling - Non-blocking alternative. Producer checks if queue accepted the item:
+
+    boolean accepted = queue.offer(order); // returns false if full, doesn't block
+    if (!accepted) {
+        // backpressure signal — handle explicitly
+        log.warn("Queue full — dropping order or slowing down");
+        metrics.increment("backpressure.events");
+    }
+
+Reactive streams — Producer asks consumer "how many items can you handle?"
+Disruptor ring buffer — Producer can't advance past consumer. Ring buffer full → producer blocks or spins
+TCP flow control — network level (Distributed systems)
+    Consumer's receive buffer fills → TCP window shrinks → producer's send blocks.
+    Solace and Aeron both expose this — if consumer is slow, broker signals producer to slow down via flow control.
+
+I had said Heartbeat.
+
+* How do you ensure idempotency?
+
+Idempotency means processing the same message twice produces the same result as processing it once.
+At-least-once delivery — Solace, Kafka — means duplicates are possible.
+A duplicate order execution processed twice = double booking. Catastrophic.
+
+In-memory set - Unique message ID + deduplication store
+    Every message carries a unique ID. Before processing, check if already seen:
+
+    void process(Order order) {
+        if (processedIds.contains(order.getId())) {
+            log.warn("Duplicate order {} — skipping", order.getId());
+            return;
+        }
+        processedIds.add(order.getId());
+        execute(order);
+    }
+    processedIds — ConcurrentHashMap, Redis, or DB unique constraint depending on scope
+
+Database unique constraint
+Idempotent design:
+    // NOT idempotent — increment is stateful
+    position.quantity += fill.quantity;
+
+    // idempotent — set absolute value
+    position.quantity = fill.cumulativeQuantity;
+
+    // FIX protocol uses cumulative quantities for exactly this reason
+
+Optimistic locking — version number:
+    UPDATE orders
+    SET status = 'FILLED', version = version + 1
+    WHERE id = ? AND version = ?
+
+Redis atomic check-and-set - Distributed deduplication using Redis
+
+* How can I process one currency/queue per JVM?
+
+Kafka partitioning — Each currency = one partition. One consumer group member per partition = one JVM per currency
+Solace queue per currency - one JVM subscribes exclusively:
+    Queue: orders/EURUSD → JVM 1 subscribes exclusively
+    Queue: orders/GBPUSD → JVM 2 subscribes exclusively
+
+JVM startup argument — currency assignment:
+    java -jar trader.jar --currency=EURUSD
+    java -jar trader.jar --currency=GBPUSD
+
+* What Low Latency patterns/concepts do I know?
+
+Off-heap allocation — ByteBuffer.allocateDirect() or Unsafe. GC never sees it. No GC pauses on hot path
+Object pooling — pre-allocate objects, reuse instead of allocate/GC. Zero allocation on hot path
+False sharing avoidance — pad fields to separate cache lines. @Contended. Prevents cache line ping-pong between cores
+Cache-friendly data structures — arrays over linked lists. Sequential memory access = CPU cache hits. Linked list = pointer chasing = cache misses
+Busy-spin — dedicated thread spins on condition instead of blocking. Eliminates OS context switch latency. Burns CPU
+CPU pinning — bind thread to specific core
+Lock-free algorithms — CAS instead of locks. No thread parking, no context switch
+Single-writer principle — one thread owns each piece of data. No synchronization needed. Disruptor is built on this
+Immutable objects + volatile reference — publish new state atomically. Readers never lock
+Thread confinement — each thread owns its data. No sharing = no synchronization
+Disruptor ring buffer — pre-allocated, cache-line padded, CAS sequencing. Lock-free, GC-free message passing
+Off-heap ring buffer — Aeron uses this. Messages stored off-heap, zero GC pressure
+Array-based structures — ArrayDeque, ArrayBlockingQueue over linked alternatives. Sequential memory = cache friendly
+SBE (Simple Binary Encoding) — fixed-size, schema-defined binary format. Zero allocation on decode
+Direct buffer access — read fields directly from ByteBuffer without creating objects. Zero allocation
+Flyweight pattern — reuse a single object wrapper over raw buffer. Decode in-place, no new objects
+UDP multicast — one packet to many receivers. Lower overhead than TCP unicast per receiver
+Kernel bypass — Aeron, OpenOnload. Skip OS network stack entirely. Microsecond latency
+Zero-copy — FileChannel.transferTo(), sendfile. Data moves from disk to network without copying through user space
+Busy-poll network — poll NIC directly instead of waiting for interrupt. Eliminates interrupt latency
+
+Patterns I can anchor to my experience:
+- SBE zero-allocation decode
+- HSBC FDP — FdpMessageReceiver, QuoterAlgoPriceSBEParser
+- UDP multicast HSBC FDP — market data in colo over UDP
+- Off-heap / ZGC - RTT — 700K record cache, G1GC → ZGC migration
+- Lock-free CAS - CS Algo — ConcurrentHashMap quote cache, rate limiter
+- Disruptor / ring buffer - HSBC Falcon — EMS/Hawk sequencer, Aeron
+- Object pooling - CS Algo — LossyUpdateQueue reuse, suppressing back-to-back identical prices
+- Busy-spin - HSBC Falcon colo — Aeron busy-spin wait strategy
+
+* How do you ensure no messages are lost in a trading system?
+
+Broker - Persistent storage + replication:
+    Solace guaranteed messaging — message persisted on broker disk before delivery. Survives broker restart
+    + high availability pairs. Active/standby with synchronous replication
+    Kafka — messages written to disk log, replicated across brokers. Survives single broker failure
+    + replication factor 3. Message written to 3 brokers. One dies — no data loss
+Consumer - Manual ack after processing
+Delivery - At-least-once + idempotent consumer
+Producer - Wait for broker ack
+Availability - Durable subscriptions - Consumer offline temporarily — messages held by broker until consumer reconnects
+Failure - Dead letter queue - Messages that fail processing repeatedly go to DLQ instead of being lost:
+    Normal queue → processing fails 3 times → Dead Letter Queue
